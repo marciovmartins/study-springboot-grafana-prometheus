@@ -40,6 +40,7 @@ The dividends and interests earned according to B3 report:
 | RECT11     | 2023-07-14 | 84.00              | 2273.39                  | 0.5272477229488965 | 0.527247722948897         |
 
 Profitability = ( Amount Earned * 100 ) / Total Paid
+
 Average profitability is a moving average of profitability
 
 ### Option 2: Calculate when a share should be sold to minimize the loss
