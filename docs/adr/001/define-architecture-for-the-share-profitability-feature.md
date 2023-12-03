@@ -1,8 +1,8 @@
 # 001: Define Architecture For the Share Profitability Feature
 
-Date: 2023-11-22
+Date: 2023-12-03
 
-Status: Draft
+Status: Accepted
 
 ## Table of Contents
 
@@ -411,10 +411,11 @@ Cons:
 
 ## 🎯 Decisions
 
-We will use the `Option 2.2.2: Event Streaming` for learning purpose. Besides the system will start without any user,
-the option 1.1 would be enough and according to the usage be implemented the option 2.2.1 and later the 2.2.2.
+We will implement all the options for learning purpose and incrementally except the "Option 2.1: Relational Database"
+because there is little chance to get a project where there is a restriction or need to do not have external dependency.
 
-The option 2.1 would be a good solution only if there is any restriction to use an external event store.
+We will follow the options order and simulate the evolution of the business and incrementally moving from a monolith
+architecture to a microservice architecture.
 
 ## 🥅 Consequences
 
