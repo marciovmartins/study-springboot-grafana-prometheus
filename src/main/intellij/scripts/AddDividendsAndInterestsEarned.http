@@ -1,0 +1,15 @@
+### Add dividends and interests earned
+POST http://localhost:8080/dividends_and_interests_earned/{{$random.uuid}}
+Content-Type: application/hal+json
+
+{
+  "shareCode": "BBSE3",
+  "date": "2023-11-16",
+  "amountEarnedCentAmount": 7000,
+  "amountEarnedCurrency": "BRL"
+}
+
+> {%
+    client.global.set('dividends_and_interests_earned_share_code', response.body.shareCode)
+    client.global.set('dividends_and_interests_earned_date', response.body.date)
+%}

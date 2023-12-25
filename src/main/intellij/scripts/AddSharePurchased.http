@@ -1,0 +1,13 @@
+### Add Share Purchased
+POST http://localhost:8080/shares_purchased/{{$random.uuid}}
+Content-Type: application/json
+
+{
+  "shareCode": "BBSE3",
+  "date": "2023-10-23",
+  "sharePriceCentAmount": 4308,
+  "sharePriceCurrency": "BRL",
+  "quantity": 40,
+  "amountPaidCentAmount": 172320,
+  "amountPaidCurrency": "BRL"
+}

@@ -1,0 +1,21 @@
+version: "3.8"
+name: "stock-mgmt"
+services:
+  mysql:
+    image: "mysql:8.2"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: stock_mgmt
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - /var/lib/mysql
+    networks:
+      main: { }
+
+volumes:
+  data:
+    external: false
+
+networks:
+  main:

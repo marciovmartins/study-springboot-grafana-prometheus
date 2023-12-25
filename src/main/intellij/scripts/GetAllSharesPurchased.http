@@ -1,0 +1,2 @@
+### Get Share Purchased
+GET http://localhost:8080/shares_purchased

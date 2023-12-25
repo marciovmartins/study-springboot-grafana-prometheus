@@ -1,0 +1,3 @@
+### Get all dividends and interests earned
+GET http://localhost:8080/dividends_and_interests_earned
+Content-Type: application/hal+json
