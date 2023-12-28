@@ -4,10 +4,8 @@ import dev.martins.marcio.stockmgmt.RootController
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
-import org.springframework.hateoas.mediatype.Affordances
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
-import org.springframework.http.HttpMethod
+import org.springframework.hateoas.server.mvc.andAffordances
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,17 +25,13 @@ class SharesPurchasedController(
     @GetMapping
     fun all(): CollectionModel<EntityModel<*>> = CollectionModel.of(
         emptyList(),
-        linkTo(methodOn(SharesPurchasedController::class.java).all())
+        linkTo<SharesPurchasedController> { all() }
             .withSelfRel(),
-        linkTo(methodOn(RootController::class.java).index())
+        linkTo<RootController> { index() }
             .withRel("root"),
-        Affordances.of(
-            linkTo(methodOn(SharesPurchasedController::class.java).add(UUID.randomUUID(), null)).withRel("add")
-        )
-            .afford(HttpMethod.POST)
-            .withInputAndOutput(SharePurchased::class.java)
-            .withName("add")
-            .toLink()
+        linkTo<SharesPurchasedController> { add(UUID.randomUUID(), null) }
+            .withRel("add")
+            .andAffordances { afford<SharesPurchasedController> { add(UUID.randomUUID(), null) } }
     )
 
     @PostMapping("/{id}")
@@ -59,7 +53,7 @@ class SharesPurchasedController(
 
     private fun sharePurchasedEntityModel(sharePurchased: SharePurchased) = EntityModel.of(
         sharePurchased,
-        linkTo(methodOn(SharesPurchasedController::class.java).all())
+        linkTo<SharesPurchasedController> { all() }
             .withRel("sharesPurchased"),
     )
 }

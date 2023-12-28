@@ -3,10 +3,8 @@ package dev.martins.marcio.stockmgmt.dividendsandinterestsearned
 import dev.martins.marcio.stockmgmt.RootController
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
-import org.springframework.hateoas.mediatype.Affordances
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
-import org.springframework.http.HttpMethod
+import org.springframework.hateoas.server.mvc.andAffordances
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,18 +24,13 @@ class DividendsAndInterestsEarnedController(
     fun all(): ResponseEntity<CollectionModel<DividendsAndInterestsEarned>> = ResponseEntity.ok(
         CollectionModel.of(
             emptyList(),
-            linkTo(methodOn(DividendsAndInterestsEarnedController::class.java).all())
+            linkTo<DividendsAndInterestsEarnedController> { all() }
                 .withSelfRel(),
-            linkTo(methodOn(RootController::class.java).index())
+            linkTo<RootController> { index() }
                 .withRel("root"),
-            Affordances.of(
-                linkTo(methodOn(DividendsAndInterestsEarnedController::class.java).add(UUID.randomUUID(), null))
-                    .withRel("add")
-            )
-                .afford(HttpMethod.POST)
-                .withInputAndOutput(DividendsAndInterestsEarned::class.java)
-                .withName("add")
-                .toLink()
+            linkTo<DividendsAndInterestsEarnedController> { add(UUID.randomUUID(), null) }
+                .withRel("add")
+                .andAffordances { afford<DividendsAndInterestsEarnedController> { add(UUID.randomUUID(), null) } }
         )
     )
 
@@ -53,7 +46,7 @@ class DividendsAndInterestsEarnedController(
     private fun entityModel(dividendsAndInterestsEarned: DividendsAndInterestsEarned): EntityModel<*> {
         return EntityModel.of(
             dividendsAndInterestsEarned,
-            linkTo(methodOn(DividendsAndInterestsEarnedController::class.java).all())
+            linkTo<DividendsAndInterestsEarnedController> { all() }
                 .withRel("dividendsAndInterestsEarned")
         )
     }
