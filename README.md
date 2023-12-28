@@ -163,7 +163,7 @@ docker run --rm -v $PWD/src:/src -v $PWD/pom.xml:/pom.xml -v $PWD/docker-compose
 
 <h2 id="tools">🔧 Tools</h2>
 
-Check the <a href="./HELP.md" title="Go to HELP.md file">HELP.md</a> file with a list of links and articles about the
+Check the <a href="./docs/HELP.md" title="Go to HELP.md file">HELP.md</a> file with a list of links and articles about the
 tools used
 in this project.
 
