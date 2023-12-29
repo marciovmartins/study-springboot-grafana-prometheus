@@ -22,6 +22,7 @@
         <a href="#how-to-run-docker" title="Go to how to run docker bookmark">Docker</a>
       </li>
       <li><a href="#how-to-run-disabling-spring-boot-docker-compose" title="Go to how to run/disabling spring-boot-docker-compose bookmark">Disabling spring-boot-docker-compose</a></li>
+      <li><a href="#how-to-run-hal-explorer" title="Go to how to run/HAL Explorer bookmark">HAL Explorer</a></li>
     </ul>
   </li>
   <li>
@@ -51,7 +52,7 @@ The `spring-boot-docker-compose` dependency is used to start up dependencies lik
 
 Te docker-compose should be version 2.21 or greater.
 
-<h2 id="how-to-run-intellij">IntelliJ</h2>
+<h3 id="how-to-run-intellij">IntelliJ</h3>
 
 Find the main file
 at: <a href="src/main/kotlin/dev/martins/marcio/stockmgmt/StockMgmtApplication.kt" title="Go to file StockMgmtApplication.kt">
@@ -65,7 +66,7 @@ In case of an error for missing dependencies, reload it with maven command "Relo
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
-<h2 id="how-to-run-maven">Maven</h2>
+<h3 id="how-to-run-maven">Maven</h3>
 
 ```shell
 mvn spring-boot:run
@@ -73,7 +74,7 @@ mvn spring-boot:run
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
-<h2 id="how-to-run-docker">Docker</h2>
+<h3 id="how-to-run-docker">Docker</h3>
 
 ```shell
 docker-compose up -d
@@ -85,7 +86,7 @@ docker run --rm -v $PWD/src:/src -v $PWD/pom.xml:/pom.xml -v $PWD/docker-compose
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
-<h2 id="how-to-run-disabling-spring-boot-docker-compose">Disabling spring-boot-docker-compose</h2>
+<h3 id="how-to-run-disabling-spring-boot-docker-compose">Disabling spring-boot-docker-compose</h3>
 
 Disable it in case you want to run the dependencies by your own.
 
@@ -99,9 +100,19 @@ spring:
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
+<h3 id="how-to-run-hal-explorer">HAL Explorer</h3>
+
+You can access try and experiment the api using [HAL Explorer](https://github.com/toedter/hal-explorer) via the path:
+
+```
+http://localhost:8080/explorer/index.html#uri=http://localhost:8080/
+```
+
+<a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
+
 <h2 id="how-to-test">🚦 How to Test</h2>
 
-<h2 id="how-to-test-intellij">Intellij</h2>
+<h3 id="how-to-test-intellij">Intellij</h3>
 
 To run all the unit and integration tests, right-click on the root folder and select "Run All Tests".
 
@@ -109,7 +120,7 @@ To run all the unit and integration tests, right-click on the root folder and se
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
-<h2 id="how-to-test-maven">Maven</h2>
+<h3 id="how-to-test-maven">Maven</h3>
 
 Unit tests:
 
@@ -129,7 +140,7 @@ mvn verify
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
-<h2 id="how-to-test-docker">Docker</h2>
+<h3 id="how-to-test-docker">Docker</h3>
 
 Unit tests:
 
