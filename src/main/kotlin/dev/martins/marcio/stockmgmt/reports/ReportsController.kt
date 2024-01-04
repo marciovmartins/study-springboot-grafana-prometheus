@@ -46,7 +46,7 @@ class ReportsController(
 
             val profitability = (earning.amountEarnedCentAmount.toDouble() * 100) / totalAmountPaid
 
-            val lastProfitability = lastProfitabilityByEarnings?.profitability ?: 0.0
+            val lastProfitability = lastProfitabilityByEarnings?.profitability ?: profitability
             val averageProfitability = (profitability + lastProfitability) / 2
 
             profitabilityByEarnings.add(
@@ -75,6 +75,8 @@ class ReportsController(
             .withSelfRel(),
         linkTo<ReportsController> { profitability(null, null, null) }
             .withRel("profitability"),
+        linkTo<ReportsController> { profitability(null, profitability.periodStart, profitability.periodEnd) }
+            .withRel("profitability-for-another-share-code"),
         linkTo<RootController> { index() }
             .withRel("root")
     )

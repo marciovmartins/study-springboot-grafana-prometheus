@@ -1,0 +1,5 @@
+### Import B3 CSV File
+POST http://localhost:8080/imports/b3
+Content-Type: text/csv
+
+< ImportB3CsvFile.csv
