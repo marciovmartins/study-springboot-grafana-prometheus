@@ -1,0 +1,1 @@
+drop table if exists nota_de_negociacao;

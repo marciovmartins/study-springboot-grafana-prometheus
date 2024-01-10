@@ -7,11 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.boot.test.web.client.postForEntity
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType
 import org.springframework.web.util.UriComponentsBuilder
 import java.time.LocalDate
-import java.util.UUID
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class ReportsIT {
@@ -23,50 +25,94 @@ internal class ReportsIT {
     @Test
     fun `generate profitability report`() {
         // given
-        val shareCode = List(10) { chars.random() }.joinToString("")
-        val periodStart = LocalDate.now().minusDays(91)
-        val periodEnd = LocalDate.now().minusDays(29)
+        val shareCode = List(10) { chars.random() }.joinToString("") // HCTR11
+        val periodStart = LocalDate.of(2021, 4, 28)
+        val periodEnd = LocalDate.of(2021, 7, 15)
 
         val sharesPurchases = listOf(
-            testSharePurchased(
+            testMovement(
+                "Transferência - Liquidação",
+                date = LocalDate.of(2021, 4, 28),
                 shareCode = shareCode,
-                date = LocalDate.now().minusDays(90),
-                sharePriceCentAmount = 9725,
-                quantity = 16,
-                amountPaidCentAmount = 155600
+                quantity = 3,
+                unitPriceCentAmount = 14700,
+                transactionValueCentAmount = 44100,
             ),
-            testSharePurchased(
+            testMovement(
+                "Transferência - Liquidação",
+                date = LocalDate.of(2021, 5, 19),
                 shareCode = shareCode,
-                date = LocalDate.now().minusDays(60),
-                sharePriceCentAmount = 8350,
-                quantity = 28,
-                amountPaidCentAmount = 233800
+                quantity = 1,
+                unitPriceCentAmount = 13500,
+                transactionValueCentAmount = 13500,
             ),
-            testSharePurchased(
+            testMovement(
+                "Transferência - Liquidação",
+                date = LocalDate.of(2021, 6, 10),
                 shareCode = shareCode,
-                date = LocalDate.now().minusDays(30),
-                sharePriceCentAmount = 7710,
-                quantity = 35,
-                amountPaidCentAmount = 269850
+                quantity = 14,
+                unitPriceCentAmount = 13946,
+                transactionValueCentAmount = 195244,
+            ),
+            testMovement(
+                "Transferência - Liquidação",
+                date = LocalDate.of(2021, 7, 2),
+                shareCode = shareCode,
+                quantity = 27,
+                unitPriceCentAmount = 13260,
+                transactionValueCentAmount = 358020,
             ),
         )
         val dividendsAndInterestsEarned = listOf(
-            testDividendsAndInterestsEarned(
+            testMovement(
+                "Rendimento",
+                date = LocalDate.of(2021, 5, 14),
                 shareCode = shareCode,
-                date = LocalDate.now().minusDays(75),
-                amountEarnedCentAmount = 1152
+                quantity = 3,
+                unitPriceCentAmount = 200,
+                transactionValueCentAmount = 600,
             ),
-            testDividendsAndInterestsEarned(
+            testMovement(
+                "Rendimento",
+                date = LocalDate.of(2021, 6, 15),
                 shareCode = shareCode,
-                date = LocalDate.now().minusDays(45),
-                amountEarnedCentAmount = 2700
+                quantity = 18,
+                unitPriceCentAmount = 190,
+                transactionValueCentAmount = 3420,
             ),
-            testDividendsAndInterestsEarned(
+            testMovement(
+                "Dividendo",
+                date = LocalDate.of(2021, 6, 15),
                 shareCode = shareCode,
-                date = LocalDate.now().minusDays(15),
-                amountEarnedCentAmount = 4800
+                quantity = 1,
+                unitPriceCentAmount = 26,
+                transactionValueCentAmount = 26,
+            ),
+            testMovement(
+                "Rendimento",
+                date = LocalDate.of(2021, 7, 15),
+                shareCode = shareCode,
+                quantity = 46,
+                unitPriceCentAmount = 170,
+                transactionValueCentAmount = 7820,
+            ),
+            testMovement(
+                "Rendimento",
+                date = LocalDate.of(2021, 8, 13),
+                shareCode = shareCode,
+                quantity = 46,
+                unitPriceCentAmount = 150,
+                transactionValueCentAmount = 6900,
             ),
         )
+
+        val headers = HttpHeaders().apply { contentType = MediaType.valueOf("text/csv") }
+        sharesPurchases.let {
+            testRestTemplate.postForEntity<Any>("/imports/b3", HttpEntity(it.toCSV(), headers))
+        }
+        dividendsAndInterestsEarned.let {
+            testRestTemplate.postForEntity<Any>("/imports/b3", HttpEntity(it.toCSV(), headers))
+        }
 
         val uriBuilder = UriComponentsBuilder.fromUriString("/reports/profitability")
             .queryParam("shareCode", shareCode)
@@ -74,49 +120,112 @@ internal class ReportsIT {
             .queryParam("periodEnd", periodEnd)
 
         // when
-        sharesPurchases.forEach {
-            testRestTemplate.postForEntity<Any>("/shares_purchased/${UUID.randomUUID()}", it)
-        }
-        dividendsAndInterestsEarned.forEach {
-            testRestTemplate.postForEntity<Any>("/dividends_and_interests_earned/${UUID.randomUUID()}", it)
-        }
         val response = testRestTemplate.getForEntity<TestProfitabilityReport>(uriBuilder.toUriString())
 
         // then
         assertThat(response.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
         assertThat(response.headers.contentType).isEqualTo(MediaType.valueOf("application/prs.hal-forms+json"))
-        assertThat(response.body).isEqualTo(
-            TestProfitabilityReport(
-                shareCode = shareCode,
-                periodStart = periodStart,
-                periodEnd = periodEnd,
-                totalAmountEarnedCentAmount = 3852,
-                totalAmountEarnedCurrency = "BRL",
-                profitability = 0.6933744221879815,
-                averageProfitability = 0.7168671596801091,
-            )
-        )
+        assertThat(response.body).isNotNull
+        assertThat(response.body!!.shareCode).isEqualTo(shareCode)
+        assertThat(response.body!!.periodStart).isEqualTo(periodStart)
+        assertThat(response.body!!.periodEnd).isEqualTo(periodEnd)
+        assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(11866)
+        assertThat(response.body!!.totalDividendsCentAmount).isEqualTo(26)
+        assertThat(response.body!!.totalRevenueCentAmount).isEqualTo(11840)
+        assertThat(response.body!!.currency).isEqualTo("BRL")
+        assertThat(response.body!!.dividendsProfitability).isEqualTo(0.010283020360380313)
+        assertThat(response.body!!.dividendsAverageProfitability).isEqualTo(0.010283020360380313)
+        assertThat(response.body!!.revenueProfitability).isEqualTo(1.2801540113675056)
+        assertThat(response.body!!.revenueAverageProfitability).isEqualTo(1.3311036357425612)
     }
 
-    private fun testSharePurchased(
-        shareCode: String = "RECT11",
-        date: LocalDate,
-        sharePriceCentAmount: Int,
-        sharePriceCurrency: String = "BRL",
-        quantity: Int,
-        amountPaidCentAmount: Int,
-        amountPaidCurrency: String = "BRL"
-    ) = TestSharePurchased(
-        shareCode, date, sharePriceCentAmount, sharePriceCurrency, quantity, amountPaidCentAmount, amountPaidCurrency,
-    )
+    @Test
+    fun `generate profitability report with irregular dividends`() {
+        // given
+        val shareCode = List(10) { chars.random() }.joinToString("") // BBSE3
+        val periodStart = LocalDate.of(2020, 4, 8)
+        val periodEnd = LocalDate.of(2020, 8, 24)
 
-    private fun testDividendsAndInterestsEarned(
-        shareCode: String = "RECT11",
-        date: LocalDate,
-        amountEarnedCentAmount: Int,
-        amountEarnedCurrency: String = "BRL"
-    ) = TestDividendsAndInterestsEarned(
-        shareCode, date, amountEarnedCentAmount, amountEarnedCurrency
+        val sharesPurchases = listOf(
+            testMovement(
+                "Transferência - Liquidação",
+                date = LocalDate.of(2020, 4, 8),
+                shareCode = shareCode,
+                quantity = 83,
+                unitPriceCentAmount = 2425,
+                transactionValueCentAmount = 201275,
+            ),
+            testMovement(
+                "Transferência - Liquidação",
+                date = LocalDate.of(2020, 5, 7),
+                shareCode = shareCode,
+                quantity = 1,
+                unitPriceCentAmount = 2515,
+                transactionValueCentAmount = 2515,
+            ),
+        )
+        val dividendsAndInterestsEarned = listOf(
+            testMovement(
+                "Dividendo",
+                date = LocalDate.of(2020, 8, 24),
+                shareCode = shareCode,
+                quantity = 84,
+                unitPriceCentAmount = 88,
+                transactionValueCentAmount = 7352,
+            ),
+        )
+
+        val headers = HttpHeaders().apply { contentType = MediaType.valueOf("text/csv") }
+        sharesPurchases.let {
+            testRestTemplate.postForEntity<Any>("/imports/b3", HttpEntity(it.toCSV(), headers))
+        }
+        dividendsAndInterestsEarned.let {
+            testRestTemplate.postForEntity<Any>("/imports/b3", HttpEntity(it.toCSV(), headers))
+        }
+
+        val uriBuilder = UriComponentsBuilder.fromUriString("/reports/profitability")
+            .queryParam("shareCode", shareCode)
+            .queryParam("periodStart", periodStart)
+            .queryParam("periodEnd", periodEnd)
+
+        // when
+        val response = testRestTemplate.getForEntity<TestProfitabilityReport>(uriBuilder.toUriString())
+
+        // then
+        assertThat(response.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+        assertThat(response.headers.contentType).isEqualTo(MediaType.valueOf("application/prs.hal-forms+json"))
+        assertThat(response.body).isNotNull
+        assertThat(response.body!!.shareCode).isEqualTo(shareCode)
+        assertThat(response.body!!.periodStart).isEqualTo(periodStart)
+        assertThat(response.body!!.periodEnd).isEqualTo(periodEnd)
+        assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(7352)
+        assertThat(response.body!!.totalDividendsCentAmount).isEqualTo(7352)
+        assertThat(response.body!!.totalRevenueCentAmount).isEqualTo(0)
+        assertThat(response.body!!.currency).isEqualTo("BRL")
+        assertThat(response.body!!.dividendsProfitability).isEqualTo(1.2025451036197392)
+        assertThat(response.body!!.dividendsAverageProfitability).isEqualTo(1.2025451036197392)
+        assertThat(response.body!!.revenueProfitability).isEqualTo(0.0)
+        assertThat(response.body!!.revenueAverageProfitability).isEqualTo(0.0)
+    }
+
+    private fun testMovement(
+        type: String?,
+        date: LocalDate?,
+        shareCode: String?,
+        brokerage: String = "CLEAR CORRETORA - GRUPO XP",
+        quantity: Int?,
+        unitPriceCentAmount: Int?,
+        transactionValueCentAmount: Int?,
+        currency: String = "BRL"
+    ) = TestMovement(
+        type,
+        date,
+        shareCode,
+        brokerage,
+        quantity,
+        unitPriceCentAmount,
+        transactionValueCentAmount,
+        currency,
     )
 
     data class TestProfitabilityReport(
@@ -124,25 +233,29 @@ internal class ReportsIT {
         val periodStart: LocalDate? = null,
         val periodEnd: LocalDate? = null,
         val totalAmountEarnedCentAmount: Int? = null,
-        val totalAmountEarnedCurrency: String? = null,
-        val profitability: Double? = null,
-        val averageProfitability: Double? = null,
+        val totalDividendsCentAmount: Int? = null,
+        val totalRevenueCentAmount: Int? = null,
+        val currency: String? = null,
+        val dividendsProfitability: Double? = null,
+        val dividendsAverageProfitability: Double? = null,
+        val revenueProfitability: Double? = null,
+        val revenueAverageProfitability: Double? = null,
     )
 
-    data class TestSharePurchased(
-        val shareCode: String? = null,
+    data class TestMovement(
+        val type: String? = null,
         val date: LocalDate? = null,
-        val sharePriceCentAmount: Int? = null,
-        val sharePriceCurrency: String? = null,
+        val shareCode: String? = null,
+        val brokerage: String? = null,
         val quantity: Int? = null,
-        val amountPaidCentAmount: Int? = null,
-        val amountPaidCurrency: String? = null,
+        val unitPriceCentAmount: Int? = null,
+        val transactionValueCentAmount: Int? = null,
+        val currency: String? = null,
     )
+}
 
-    data class TestDividendsAndInterestsEarned(
-        val shareCode: String? = null,
-        val date: LocalDate? = null,
-        val amountEarnedCentAmount: Int? = null,
-        val amountEarnedCurrency: String? = null,
-    )
+private fun List<ReportsIT.TestMovement>.toCSV(): String = this.joinToString(separator = "\n") {
+    val operation = it.transactionValueCentAmount?.let { tv -> if (tv >= 0) "Credito" else "Debito" }
+    val dateBR = it.date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    "$operation;${dateBR};${it.type};${it.shareCode};${it.brokerage};${it.quantity};${it.unitPriceCentAmount};${it.transactionValueCentAmount}"
 }

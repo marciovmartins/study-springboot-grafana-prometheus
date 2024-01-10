@@ -1,10 +1,8 @@
 package dev.martins.marcio.stockmgmt.importfiles
 
 import dev.martins.marcio.stockmgmt.RootController
-import dev.martins.marcio.stockmgmt.dividendsandinterestsearned.DividendsAndInterestsEarned
-import dev.martins.marcio.stockmgmt.dividendsandinterestsearned.DividendsAndInterestsEarnedRepository
-import dev.martins.marcio.stockmgmt.sharespurchased.SharePurchased
-import dev.martins.marcio.stockmgmt.sharespurchased.SharePurchasedRepository
+import dev.martins.marcio.stockmgmt.movements.Movement
+import dev.martins.marcio.stockmgmt.movements.MovementRepository
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.mvc.andAffordances
@@ -17,51 +15,41 @@ import java.util.UUID
 
 @RestController
 class B3Controller(
-    private val sharePurchasedRepository: SharePurchasedRepository,
-    private val dividendsAndInterestsEarnedRepository: DividendsAndInterestsEarnedRepository,
+    private val movementRepository: MovementRepository,
 ) {
     @PostMapping(value = ["/imports/b3"], consumes = ["text/csv"])
     fun importB3Csv(@RequestBody csvData: String?): CollectionModel<EntityModel<*>> {
         csvData!!
             .split("\n")
             .filter { it.trim() != "" }
+            .drop(1)
             .forEach loop@{
                 val line = it.split(";")
-                println("### $line ###")
-                val type = B3Types.from(line[2]) ?: return@loop
                 val date = line[1].toLocalDate()
-                val movement = line[3]
+                val movementType = when (B3Types.from(line[2]) ?: return@loop) {
+                    B3Types.TransferSettlement -> Movement.Type.TRANSFER
+                    B3Types.Dividends -> Movement.Type.DIVIDENDS
+                    B3Types.Revenue -> Movement.Type.REVENUE
+                }
+                val product = line[3]
+                val brokerage = line[4]
                 val quantity = line[5]
                 val unitPrice = line[6]
-                val operationValue = line[7]
+                val transactionValue = line[7]
 
-                when (type) {
-                    B3Types.TransferSettlement ->
-                        sharePurchasedRepository.save(
-                            SharePurchased(
-                                id = UUID.randomUUID(),
-                                shareCode = movement.split(" ")[0],
-                                date = date,
-                                sharePriceCentAmount = unitPrice.toCentAmount(),
-                                sharePriceCurrency = "BRL",
-                                quantity = quantity.toInt(),
-                                amountPaidCentAmount = operationValue.toCentAmount(),
-                                amountPaidCurrency = "BRL",
-                            )
-                        )
-
-                    B3Types.Dividends,
-                    B3Types.Income ->
-                        dividendsAndInterestsEarnedRepository.save(
-                            DividendsAndInterestsEarned(
-                                id = UUID.randomUUID(),
-                                shareCode = movement.split(" ")[0],
-                                date = date,
-                                amountEarnedCentAmount = operationValue.toCentAmount(),
-                                amountEarnedCurrency = "BRL",
-                            )
-                        )
-                }
+                movementRepository.save(
+                    Movement(
+                        id = UUID.randomUUID(),
+                        type = movementType,
+                        date = date,
+                        shareCode = product.split(" ")[0],
+                        brokerage = brokerage,
+                        quantity = quantity.toInt(),
+                        unitPriceCentAmount = unitPrice.toCentAmount(),
+                        transactionValueCentAmount = transactionValue.toCentAmount(),
+                        currency = "BRL",
+                    )
+                )
             }
 
         return CollectionModel.of(
@@ -81,10 +69,16 @@ class B3Controller(
         return LocalDate.of(year, month, dayOfMonth)
     }
 
-    private fun String.toCentAmount(): Int = this
-        .replace("R$", "")
-        .replace(".", "")
-        .replace(",", "")
-        .trim()
-        .toInt()
+    private fun String.toCentAmount(): Int {
+        return try {
+            this
+                .replace("R$", "")
+                .replace(".", "")
+                .replace(",", "")
+                .trim()
+                .toInt()
+        } catch (e: NumberFormatException) {
+            0
+        }
+    }
 }

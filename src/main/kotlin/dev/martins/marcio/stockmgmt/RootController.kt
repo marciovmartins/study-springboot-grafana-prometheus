@@ -1,9 +1,7 @@
 package dev.martins.marcio.stockmgmt
 
-import dev.martins.marcio.stockmgmt.dividendsandinterestsearned.DividendsAndInterestsEarnedController
 import dev.martins.marcio.stockmgmt.importfiles.B3Controller
 import dev.martins.marcio.stockmgmt.reports.ReportsController
-import dev.martins.marcio.stockmgmt.sharespurchased.SharesPurchasedController
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.server.mvc.andAffordances
 import org.springframework.hateoas.server.mvc.linkTo
@@ -19,10 +17,6 @@ class RootController {
     fun index(): ResponseEntity<CollectionModel<Any>> = ResponseEntity.ok(
         CollectionModel.of(
             emptyList(),
-            linkTo<SharesPurchasedController> { all() }
-                .withRel("sharesPurchased"),
-            linkTo<DividendsAndInterestsEarnedController> { all() }
-                .withRel("dividendsAndInterestsEarned"),
             linkTo<ReportsController> { profitability(null, null, null) }
                 .withRel("profitability"),
             linkTo<B3Controller> { importB3Csv(null) }

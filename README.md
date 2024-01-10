@@ -7,7 +7,7 @@
 <a href="https://www.mysql.com/" title="Go to Mysql website"><img alt="Mysql icon" src="./docs/assets/mysql.svg" width="25"/></a>
 <a href="https://flywaydb.org/" title="Go to Flyway website"><img alt="Flyway icon" src="./docs/assets/flyway.svg" width="25"/></a>
 
-<img src="https://img.shields.io/badge/VERSION-v0.1-green?style=for-the-badge" alt="version badge with value V0.1"/> <a href="https://github.com/users/marciovmartins/projects/2" title="Go to Github Project"><img src="https://img.shields.io/badge/PROJECT%20VIEW-GITHUB-181717?style=for-the-badge&logo=github&logoColor=white" alt="Badge with the title Project View and value Github"/></a>
+<a href="https://github.com/users/marciovmartins/projects/2" title="Go to Github Project"><img src="https://img.shields.io/badge/PROJECT%20VIEW-GITHUB-181717?style=for-the-badge&logo=github&logoColor=white" alt="Badge with the title Project View and value Github"/></a>
 
 <h2 id="table-of-contents">⤴️ Table of Contents</h2>
 

@@ -1,0 +1,1 @@
+drop table if exists dividends_and_interests_earned;
