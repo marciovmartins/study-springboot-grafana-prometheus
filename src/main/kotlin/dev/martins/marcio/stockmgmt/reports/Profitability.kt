@@ -9,9 +9,12 @@ data class Profitability(
     val totalAmountEarnedCentAmount: Int,
     val totalDividendsCentAmount: Int,
     val totalRevenueCentAmount: Int,
+    val totalInterestOnEquityCentAmount: Int,
     val currency: String,
     val dividendsProfitability: Double,
     val dividendsAverageProfitability: Double,
     val revenueProfitability: Double,
     val revenueAverageProfitability: Double,
+    val interestOnEquityProfitability: Double,
+    val interestOnEquityAverageProfitability: Double,
 )

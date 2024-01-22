@@ -26,6 +26,6 @@ data class Movement(
     val currency: String,
 ) {
     enum class Type {
-        TRANSFER, DIVIDENDS, REVENUE,
+        TRANSFER, DIVIDENDS, REVENUE, INTEREST_ON_EQUITY,
     }
 }

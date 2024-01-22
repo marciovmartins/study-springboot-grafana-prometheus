@@ -26,9 +26,7 @@ class ReportsController(
         @RequestParam periodEnd: LocalDate?,
     ): ResponseEntity<EntityModel<Profitability>> {
         val sharesPurchased = movementRepository.findByShareCodeAndDateLessThanEqualAndTypeInOrderByDate(
-            shareCode!!,
-            periodEnd!!,
-            Movement.Type.TRANSFER,
+            shareCode!!, periodEnd!!, Movement.Type.TRANSFER,
         )
         val dividends = movementRepository.findByShareCodeAndDateLessThanEqualAndTypeInOrderByDate(
             shareCode, periodEnd, Movement.Type.DIVIDENDS,
@@ -40,20 +38,29 @@ class ReportsController(
         )
         val revenueProfitability = profitability(sharesPurchased, revenue, periodStart)
 
+        val interestsOnEquity = movementRepository.findByShareCodeAndDateLessThanEqualAndTypeInOrderByDate(
+            shareCode, periodEnd, Movement.Type.INTEREST_ON_EQUITY,
+        )
+        val interestOnEquityProfitability = profitability(sharesPurchased, interestsOnEquity, periodStart)
+
         val totalDividendsCentAmount = dividendsProfitability?.totalAmountEarnedCentAmount ?: 0
         val totalRevenueCentAmount = revenueProfitability?.totalAmountEarnedCentAmount ?: 0
+        val totalInterestOnEquityCentAmount = interestOnEquityProfitability?.totalAmountEarnedCentAmount ?: 0
         val profitability = Profitability(
             shareCode = shareCode,
             periodStart = periodStart!!,
             periodEnd = periodEnd,
-            totalAmountEarnedCentAmount = totalRevenueCentAmount + totalDividendsCentAmount,
+            totalAmountEarnedCentAmount = totalRevenueCentAmount + totalDividendsCentAmount + totalInterestOnEquityCentAmount,
             totalDividendsCentAmount = totalDividendsCentAmount,
             totalRevenueCentAmount = totalRevenueCentAmount,
+            totalInterestOnEquityCentAmount = totalInterestOnEquityCentAmount,
             currency = "BRL",
             dividendsProfitability = dividendsProfitability?.profitability ?: 0.0,
             dividendsAverageProfitability = dividendsProfitability?.averageProfitability ?: 0.0,
             revenueProfitability = revenueProfitability?.profitability ?: 0.0,
             revenueAverageProfitability = revenueProfitability?.averageProfitability ?: 0.0,
+            interestOnEquityProfitability = interestOnEquityProfitability?.profitability ?: 0.0,
+            interestOnEquityAverageProfitability = interestOnEquityProfitability?.averageProfitability ?: 0.0,
         )
 
         return ResponseEntity.ok(profitabilityEntityModel(profitability))

@@ -3,7 +3,8 @@ package dev.martins.marcio.stockmgmt.importfiles
 enum class B3Types(private val typeName: String) {
     TransferSettlement("Transferência - Liquidação"),
     Dividends("Dividendo"),
-    Revenue("Rendimento");
+    Revenue("Rendimento"),
+    InterestOnEquity("Juros Sobre Capital Próprio");
 
     companion object {
         private val types: Map<String, B3Types> = values().associateBy { it.typeName }

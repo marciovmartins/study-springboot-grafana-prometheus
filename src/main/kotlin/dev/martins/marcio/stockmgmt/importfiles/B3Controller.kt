@@ -30,6 +30,7 @@ class B3Controller(
                     B3Types.TransferSettlement -> Movement.Type.TRANSFER
                     B3Types.Dividends -> Movement.Type.DIVIDENDS
                     B3Types.Revenue -> Movement.Type.REVENUE
+                    B3Types.InterestOnEquity -> Movement.Type.INTEREST_ON_EQUITY
                 }
                 val product = line[3]
                 val brokerage = line[4]

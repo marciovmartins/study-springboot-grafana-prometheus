@@ -31,7 +31,7 @@ internal class ReportsIT {
 
         val sharesPurchases = listOf(
             testMovement(
-                "Transferência - Liquidação",
+                type = "Transferência - Liquidação",
                 date = LocalDate.of(2021, 4, 28),
                 shareCode = shareCode,
                 quantity = 3,
@@ -39,7 +39,7 @@ internal class ReportsIT {
                 transactionValueCentAmount = 44100,
             ),
             testMovement(
-                "Transferência - Liquidação",
+                type = "Transferência - Liquidação",
                 date = LocalDate.of(2021, 5, 19),
                 shareCode = shareCode,
                 quantity = 1,
@@ -47,7 +47,7 @@ internal class ReportsIT {
                 transactionValueCentAmount = 13500,
             ),
             testMovement(
-                "Transferência - Liquidação",
+                type = "Transferência - Liquidação",
                 date = LocalDate.of(2021, 6, 10),
                 shareCode = shareCode,
                 quantity = 14,
@@ -55,7 +55,7 @@ internal class ReportsIT {
                 transactionValueCentAmount = 195244,
             ),
             testMovement(
-                "Transferência - Liquidação",
+                type = "Transferência - Liquidação",
                 date = LocalDate.of(2021, 7, 2),
                 shareCode = shareCode,
                 quantity = 27,
@@ -63,9 +63,9 @@ internal class ReportsIT {
                 transactionValueCentAmount = 358020,
             ),
         )
-        val dividendsAndInterestsEarned = listOf(
+        val earnings = listOf(
             testMovement(
-                "Rendimento",
+                type = "Rendimento",
                 date = LocalDate.of(2021, 5, 14),
                 shareCode = shareCode,
                 quantity = 3,
@@ -73,7 +73,7 @@ internal class ReportsIT {
                 transactionValueCentAmount = 600,
             ),
             testMovement(
-                "Rendimento",
+                type = "Rendimento",
                 date = LocalDate.of(2021, 6, 15),
                 shareCode = shareCode,
                 quantity = 18,
@@ -81,7 +81,7 @@ internal class ReportsIT {
                 transactionValueCentAmount = 3420,
             ),
             testMovement(
-                "Dividendo",
+                type = "Dividendo",
                 date = LocalDate.of(2021, 6, 15),
                 shareCode = shareCode,
                 quantity = 1,
@@ -89,7 +89,7 @@ internal class ReportsIT {
                 transactionValueCentAmount = 26,
             ),
             testMovement(
-                "Rendimento",
+                type = "Rendimento",
                 date = LocalDate.of(2021, 7, 15),
                 shareCode = shareCode,
                 quantity = 46,
@@ -97,7 +97,15 @@ internal class ReportsIT {
                 transactionValueCentAmount = 7820,
             ),
             testMovement(
-                "Rendimento",
+                type = "Juros Sobre Capital Próprio",
+                date = LocalDate.of(2021, 7, 15),
+                shareCode = shareCode,
+                quantity = 61,
+                unitPriceCentAmount = 150,
+                transactionValueCentAmount = 9150,
+            ),
+            testMovement(
+                type = "Rendimento",
                 date = LocalDate.of(2021, 8, 13),
                 shareCode = shareCode,
                 quantity = 46,
@@ -110,7 +118,7 @@ internal class ReportsIT {
         sharesPurchases.let {
             testRestTemplate.postForEntity<Any>("/imports/b3", HttpEntity(it.toCSV(), headers))
         }
-        dividendsAndInterestsEarned.let {
+        earnings.let {
             testRestTemplate.postForEntity<Any>("/imports/b3", HttpEntity(it.toCSV(), headers))
         }
 
@@ -129,14 +137,17 @@ internal class ReportsIT {
         assertThat(response.body!!.shareCode).isEqualTo(shareCode)
         assertThat(response.body!!.periodStart).isEqualTo(periodStart)
         assertThat(response.body!!.periodEnd).isEqualTo(periodEnd)
-        assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(11866)
+        assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(21016)
         assertThat(response.body!!.totalDividendsCentAmount).isEqualTo(26)
         assertThat(response.body!!.totalRevenueCentAmount).isEqualTo(11840)
+        assertThat(response.body!!.totalInterestOnEquityCentAmount).isEqualTo(9150)
         assertThat(response.body!!.currency).isEqualTo("BRL")
         assertThat(response.body!!.dividendsProfitability).isEqualTo(0.010283020360380313)
         assertThat(response.body!!.dividendsAverageProfitability).isEqualTo(0.010283020360380313)
         assertThat(response.body!!.revenueProfitability).isEqualTo(1.2801540113675056)
         assertThat(response.body!!.revenueAverageProfitability).isEqualTo(1.3311036357425612)
+        assertThat(response.body!!.interestOnEquityProfitability).isEqualTo(1.4978784148353808)
+        assertThat(response.body!!.interestOnEquityAverageProfitability).isEqualTo(1.4978784148353808)
     }
 
     @Test
@@ -235,11 +246,14 @@ internal class ReportsIT {
         val totalAmountEarnedCentAmount: Int? = null,
         val totalDividendsCentAmount: Int? = null,
         val totalRevenueCentAmount: Int? = null,
+        val totalInterestOnEquityCentAmount: Int? = null,
         val currency: String? = null,
         val dividendsProfitability: Double? = null,
         val dividendsAverageProfitability: Double? = null,
         val revenueProfitability: Double? = null,
         val revenueAverageProfitability: Double? = null,
+        val interestOnEquityProfitability: Double? = null,
+        val interestOnEquityAverageProfitability: Double? = null,
     )
 
     data class TestMovement(
@@ -252,10 +266,12 @@ internal class ReportsIT {
         val transactionValueCentAmount: Int? = null,
         val currency: String? = null,
     )
-}
 
-private fun List<ReportsIT.TestMovement>.toCSV(): String = this.joinToString(separator = "\n") {
-    val operation = it.transactionValueCentAmount?.let { tv -> if (tv >= 0) "Credito" else "Debito" }
-    val dateBR = it.date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    "$operation;${dateBR};${it.type};${it.shareCode};${it.brokerage};${it.quantity};${it.unitPriceCentAmount};${it.transactionValueCentAmount}"
+    private fun List<TestMovement>.toCSV(): String =
+        "Entrada/Saída;Data;Movimentação;Produto;Instituição;Quantidade; Preço unitário ; Valor da Operação\n" +
+                this.joinToString(separator = "\n") {
+                    val operation = it.transactionValueCentAmount?.let { tv -> if (tv >= 0) "Credito" else "Debito" }
+                    val dateBR = it.date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    "$operation;${dateBR};${it.type};${it.shareCode};${it.brokerage};${it.quantity};${it.unitPriceCentAmount};${it.transactionValueCentAmount}"
+                }
 }
