@@ -6,6 +6,8 @@ data class Profitability(
     val shareCode: String,
     val periodStart: LocalDate,
     val periodEnd: LocalDate,
+    val score: Double,
+    val scoreAverage: Double,
     val totalAmountEarnedCentAmount: Int,
     val totalDividendsCentAmount: Int,
     val totalRevenueCentAmount: Int,

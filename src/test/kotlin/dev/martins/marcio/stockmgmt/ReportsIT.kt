@@ -137,6 +137,8 @@ internal class ReportsIT {
         assertThat(response.body!!.shareCode).isEqualTo(shareCode)
         assertThat(response.body!!.periodStart).isEqualTo(periodStart)
         assertThat(response.body!!.periodEnd).isEqualTo(periodEnd)
+        assertThat(response.body!!.score).isEqualTo(0.010283020360380313 + 1.2801540113675056 + 1.4978784148353808)
+        assertThat(response.body!!.scoreAverage).isEqualTo(0.010283020360380313 + 1.3311036357425612 + 1.4978784148353808)
         assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(21016)
         assertThat(response.body!!.totalDividendsCentAmount).isEqualTo(26)
         assertThat(response.body!!.totalRevenueCentAmount).isEqualTo(11840)
@@ -243,6 +245,8 @@ internal class ReportsIT {
         val shareCode: String? = null,
         val periodStart: LocalDate? = null,
         val periodEnd: LocalDate? = null,
+        val score: Double? = null,
+        val scoreAverage: Double? = null,
         val totalAmountEarnedCentAmount: Int? = null,
         val totalDividendsCentAmount: Int? = null,
         val totalRevenueCentAmount: Int? = null,

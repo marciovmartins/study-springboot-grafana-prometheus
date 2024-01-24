@@ -50,6 +50,12 @@ class ReportsController(
             shareCode = shareCode,
             periodStart = periodStart!!,
             periodEnd = periodEnd,
+            score = (dividendsProfitability?.profitability ?: 0.0) +
+                    (revenueProfitability?.profitability ?: 0.0) +
+                    (interestOnEquityProfitability?.profitability ?: 0.0),
+            scoreAverage = (dividendsProfitability?.averageProfitability ?: 0.0) +
+                    (revenueProfitability?.averageProfitability ?: 0.0) +
+                    (interestOnEquityProfitability?.averageProfitability ?: 0.0),
             totalAmountEarnedCentAmount = totalRevenueCentAmount + totalDividendsCentAmount + totalInterestOnEquityCentAmount,
             totalDividendsCentAmount = totalDividendsCentAmount,
             totalRevenueCentAmount = totalRevenueCentAmount,
