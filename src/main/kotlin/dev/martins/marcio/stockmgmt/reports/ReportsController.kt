@@ -46,6 +46,9 @@ class ReportsController(
         val totalDividendsCentAmount = dividendsProfitability?.totalAmountEarnedCentAmount ?: 0
         val totalRevenueCentAmount = revenueProfitability?.totalAmountEarnedCentAmount ?: 0
         val totalInterestOnEquityCentAmount = interestOnEquityProfitability?.totalAmountEarnedCentAmount ?: 0
+
+        val totalInvestedCentAmount = sharesPurchased.sumOf { it.transactionValueCentAmount }
+
         val profitability = Profitability(
             shareCode = shareCode,
             periodStart = periodStart!!,
@@ -56,7 +59,8 @@ class ReportsController(
             scoreAverage = (dividendsProfitability?.averageProfitability ?: 0.0) +
                     (revenueProfitability?.averageProfitability ?: 0.0) +
                     (interestOnEquityProfitability?.averageProfitability ?: 0.0),
-            totalAmountEarnedCentAmount = totalRevenueCentAmount + totalDividendsCentAmount + totalInterestOnEquityCentAmount,
+            totalInvestedCentAmount = totalInvestedCentAmount,
+            totalEarnedCentAmount = totalRevenueCentAmount + totalDividendsCentAmount + totalInterestOnEquityCentAmount,
             totalDividendsCentAmount = totalDividendsCentAmount,
             totalRevenueCentAmount = totalRevenueCentAmount,
             totalInterestOnEquityCentAmount = totalInterestOnEquityCentAmount,

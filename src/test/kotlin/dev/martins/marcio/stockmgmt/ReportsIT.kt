@@ -139,7 +139,8 @@ internal class ReportsIT {
         assertThat(response.body!!.periodEnd).isEqualTo(periodEnd)
         assertThat(response.body!!.score).isEqualTo(0.010283020360380313 + 1.2801540113675056 + 1.4978784148353808)
         assertThat(response.body!!.scoreAverage).isEqualTo(0.010283020360380313 + 1.3311036357425612 + 1.4978784148353808)
-        assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(21016)
+        assertThat(response.body!!.totalInvestedCentAmount).isEqualTo(44100 + 13500 + 195244 + 358020)
+        assertThat(response.body!!.totalEarnedCentAmount).isEqualTo(21016)
         assertThat(response.body!!.totalDividendsCentAmount).isEqualTo(26)
         assertThat(response.body!!.totalRevenueCentAmount).isEqualTo(11840)
         assertThat(response.body!!.totalInterestOnEquityCentAmount).isEqualTo(9150)
@@ -211,7 +212,8 @@ internal class ReportsIT {
         assertThat(response.body!!.shareCode).isEqualTo(shareCode)
         assertThat(response.body!!.periodStart).isEqualTo(periodStart)
         assertThat(response.body!!.periodEnd).isEqualTo(periodEnd)
-        assertThat(response.body!!.totalAmountEarnedCentAmount).isEqualTo(7352)
+        assertThat(response.body!!.totalInvestedCentAmount).isEqualTo(201275 + 2515)
+        assertThat(response.body!!.totalEarnedCentAmount).isEqualTo(7352)
         assertThat(response.body!!.totalDividendsCentAmount).isEqualTo(7352)
         assertThat(response.body!!.totalRevenueCentAmount).isEqualTo(0)
         assertThat(response.body!!.currency).isEqualTo("BRL")
@@ -247,7 +249,8 @@ internal class ReportsIT {
         val periodEnd: LocalDate? = null,
         val score: Double? = null,
         val scoreAverage: Double? = null,
-        val totalAmountEarnedCentAmount: Int? = null,
+        val totalInvestedCentAmount: Int? = null,
+        val totalEarnedCentAmount: Int? = null,
         val totalDividendsCentAmount: Int? = null,
         val totalRevenueCentAmount: Int? = null,
         val totalInterestOnEquityCentAmount: Int? = null,
