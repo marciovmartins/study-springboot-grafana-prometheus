@@ -19,6 +19,15 @@
       <li><a href="#how-to-run-docker" title="Go to how to run with docker bookmark">Run with Docker</a></li>
     </ul>
   </li>
+  <li>
+    🚦 <a href="#how-to-test" title="Go to how to test bookmark">How to Test</a>
+    <ul>
+      <li>
+        <a href="#how-to-test-maven" title="Go to how to test maven bookmark">Test with Maven</a>,
+        <a href="#how-to-test-docker" title="Go to how to test docker bookmark">Test with Docker</a>
+      </li>
+    </ul>
+  </li>
   <li>📖 <a href="#references" title="Go to about bookmark">References</a></li>
 </ul>
 
@@ -53,10 +62,10 @@ Initialize the Prometheus and Grafana with Docker Compose with the command:
 docker compose up
 ```
 
-| Component  | Url                   |
-|------------|-----------------------|
-| Prometheus | http://localhost:9090 |
-| Grafana    | http://localhost:3000 |
+| Component  | Url                   | User  | Password |
+|------------|-----------------------|-------|----------|
+| Prometheus | http://localhost:9090 | -     | -        |
+| Grafana    | http://localhost:3000 | admin | admin    | 
 
 <h3 id="how-to-run-maven">Run with Maven</h3>
 
@@ -98,6 +107,20 @@ docker run --rm `
   --label com.docker.compose.project=study-springboot-grafana-prometheus `
   maven:3.8.8-eclipse-temurin-21-alpine mvn spring-boot:run
 ````
+
+<a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
+
+<h2 id="how-to-test">How to Test</h2>
+
+<h3 id="how-to-test-maven">Test with Maven</h3>
+
+TODO
+
+<a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
+
+<h3 id="how-to-test-docker">Test with Docker</h3>
+
+TODO
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
