@@ -1,0 +1,16 @@
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+logging:
+  level:
+    root: ERROR
+    dev.martins.marcio.studies.springbootgrafanaprometheus: INFO
+    org.springframework.boot.web.embedded.tomcat.TomcatWebServer: INFO
