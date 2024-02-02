@@ -6,7 +6,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./src/main/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./src/test/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring
   grafana:
@@ -14,8 +14,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./src/main/grafana/provisioning:/etc/grafana/provisioning
-      - ./src/main/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./src/test/grafana/provisioning:/etc/grafana/provisioning
+      - ./src/test/grafana/dashboards:/var/lib/grafana/dashboards
     networks:
       - monitoring
 
