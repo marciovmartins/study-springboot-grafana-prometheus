@@ -25,7 +25,9 @@
 
 Studies about Spring Boot with Prometheus and Grafana from the
 article <a href="https://medium.com/javarevisited/springboot-app-monitoring-with-grafana-prometheus-7c723f0dec15" title="Go to the link">
-Springboot App monitoring with Grafana & Prometheus by Vishnu M V<a/>
+Springboot App monitoring with Grafana & Prometheus by Vishnu M V<a/>.
+
+Added some business metrics to Grafana and learned how to provision dashboards and datasources.
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 

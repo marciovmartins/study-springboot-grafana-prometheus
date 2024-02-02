@@ -7,18 +7,31 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/flipcoin")
+@RequestMapping("/api/flipCoin")
 class FlipCoinController(
-    private val registry: MeterRegistry
+    registry: MeterRegistry
 ) {
     private val options: List<String> = listOf("Heads", "Tails")
 
-    private val flipCoinCounter: Counter = Counter.builder("flipcoin.count")
+    private val flipCoinCounter: Counter = Counter.builder("flip_coin.count")
+        .register(registry)
+
+    private val headsCounter: Counter = Counter.builder("flip_coin.odds")
+        .tag("side", "Heads")
+        .register(registry)
+
+    private val tailsCounter: Counter = Counter.builder("flip_coin.odds")
+        .tag("side", "Tails")
         .register(registry)
 
     @GetMapping
     fun handle(): String {
         flipCoinCounter.increment()
-        return options.random()
+        val result = options.random()
+        when (result) {
+            "Heads" -> headsCounter.increment()
+            "Tails" -> tailsCounter.increment()
+        }
+        return result
     }
 }
