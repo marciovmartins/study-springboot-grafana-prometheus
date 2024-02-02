@@ -71,8 +71,9 @@ Linux/MacOSX:
 ````shell
 docker run --rm \
   -p 8080:8080 \
-  -v ./src:/src \
-  -v ./pom.xml:/pom.xml \
+  -w /app \
+  -v ./src:/app/src \
+  -v ./pom.xml:/app/pom.xml \
   -v data:/root/.m2 \
   --network=study-springboot-grafana-prometheus_monitoring \
   --name=/study-springboot-grafana-prometheus-app-1 \
