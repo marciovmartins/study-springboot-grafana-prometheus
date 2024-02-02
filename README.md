@@ -1,6 +1,7 @@
 <!--suppress HtmlUnknownAnchorTarget -->
 <h1>Study about Spring Boot with Prometheus and Grafana</h1>
 
+<a href="https://kotlinlang.org/" title="Go to kotlin website"><img alt="Kotlin icon" src="./docs/assets/kotlin.svg" width="25"/></a>
 <a href="https://spring.io/" title="Go to spring.io website"><img alt="Spring icon" src="./docs/assets/spring.svg" width="25"/></a>
 <a href="https://spring.io/projects/spring-boot" title="Go to spring boot page"><img alt="Spring Boot icon" src="./docs/assets/springboot.svg" width="25"/></a>
 <a href="https://maven.apache.org/" title="Go to apache.org website"><img alt="Docker icon" src="./docs/assets/apachemaven.svg" width="25"/></a>
