@@ -52,10 +52,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -94,8 +90,8 @@
             "uid": "ae7ce687-42ed-4d37-b2a0-c99ff7bdec0a"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "flip_coin_count_total",
+          "editorMode": "code",
+          "expr": "sum(increase(flip_coin_count_total[$__range]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -198,7 +194,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "increase(flip_coin_odds_total{side=\"Heads\"}[5m])",
+          "expr": "sum(increase(flip_coin_odds_total{side=\"Heads\",job=\"spring-actuator\"}[$__range]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -214,7 +210,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "increase(flip_coin_odds_total{side=\"Tails\"}[5m])",
+          "expr": "sum(increase(flip_coin_odds_total{side=\"Tails\",job=\"spring-actuator\"}[$__range]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
