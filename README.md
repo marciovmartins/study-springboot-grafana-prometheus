@@ -45,6 +45,13 @@ Added some business metrics to Grafana and learned how to provision dashboards a
 
 Very easy to enable it with spring boot actuator and there are dashboards ready for use.
 
+Some difficulties do make it to work cross-platform. Since the docker network works in a different way between Windows
+and Linux. There is no direct way to access the host ip address from inside the container, making harder for prometheus
+to scrape information from the application.
+
+More investigation would be required to make the prometheus scraper work properly cross-platform. For now, I added both
+urls to be scrapped and accept that one of them is going to fail.
+
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
 <h2 id="how-to-run">🏃 How to Run</h2>
@@ -112,15 +119,18 @@ docker run --rm `
 
 <h2 id="how-to-test">How to Test</h2>
 
-<h3 id="how-to-test-maven">Test with Maven</h3>
+Some endpoints to test the business metrics in Grafana.
 
-TODO
+| Action      | URI                                    | Description                                                                                                     |
+|-------------|----------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| Flip a Coin | GET http://localhost:8080/api/flipCoin | Returns head or tail value and register a total count metric and another metric telling how many tails or heads |
 
-<a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
+And below the Grafana Dashboards
 
-<h3 id="how-to-test-docker">Test with Docker</h3>
-
-TODO
+| Dashboard        | URL                                                                           | Description                          |
+|------------------|-------------------------------------------------------------------------------|--------------------------------------|
+| Business Metrics | http://localhost:3000/d/d5ae9a0e-e1b5-4e87-8a0a-d0720cc17a88/business-metrics | Metrics added inside the application |
+| JVM (Micrometer) | http://localhost:3000/d/fa3cc0b9-16f8-4b8a-a113-eeaf0eac7647/jvm-micrometer   | Metrics scraped related to the JVM   |
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
