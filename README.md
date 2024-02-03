@@ -130,7 +130,7 @@ And below the Grafana Dashboards
 | Dashboard        | URL                                                                           | Description                          |
 |------------------|-------------------------------------------------------------------------------|--------------------------------------|
 | Business Metrics | http://localhost:3000/d/d5ae9a0e-e1b5-4e87-8a0a-d0720cc17a88/business-metrics | Metrics added inside the application |
-| JVM (Micrometer) | http://localhost:3000/d/fa3cc0b9-16f8-4b8a-a113-eeaf0eac7647/jvm-micrometer   | Metrics scraped related to the JVM   |
+| JVM (Micrometer) | http://localhost:3000/d/d815b226-48af-4ecd-89de-50782a2d0ada/jvm-micrometer   | Metrics scraped related to the JVM   |
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
