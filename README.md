@@ -127,10 +127,11 @@ Some endpoints to test the business metrics in Grafana.
 
 And below the Grafana Dashboards
 
-| Dashboard        | URL                                                                           | Description                          |
-|------------------|-------------------------------------------------------------------------------|--------------------------------------|
-| Business Metrics | http://localhost:3000/d/d5ae9a0e-e1b5-4e87-8a0a-d0720cc17a88/business-metrics | Metrics added inside the application |
-| JVM (Micrometer) | http://localhost:3000/d/d815b226-48af-4ecd-89de-50782a2d0ada/jvm-micrometer   | Metrics scraped related to the JVM   |
+| Dashboard                  | URL                                                                           | Description                          |
+|----------------------------|-------------------------------------------------------------------------------|--------------------------------------|
+| Business Metrics           | http://localhost:3000/d/d5ae9a0e-e1b5-4e87-8a0a-d0720cc17a88/business-metrics | Metrics added inside the application |
+| JVM (Micrometer)           | http://localhost:3000/d/d815b226-48af-4ecd-89de-50782a2d0ada/jvm-micrometer   | Metrics related to the JVM           |
+| Spring Boot 3.x Statistics | http://localhost:3000/d/spring_boot_21_2/spring-boot-3-x-statistics           | Metrics related to Spring Boot       |
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
