@@ -45,12 +45,12 @@ Added some business metrics to Grafana and learned how to provision dashboards a
 
 Very easy to enable it with spring boot actuator and there are dashboards ready for use.
 
-Some difficulties do make it to work cross-platform. Since the docker network works in a different way between Windows
-and Linux. There is no direct way to access the host ip address from inside the container, making harder for prometheus
-to scrape information from the application.
+Some difficulties getting it to work cross-platform. How docker networking works differently between Windows and Linux.
+There is no direct way to access the host IP address from within the container, making prometheus difficult to extract
+information from the application by Prometheus scraper.
 
-More investigation would be required to make the prometheus scraper work properly cross-platform. For now, I added both
-urls to be scrapped and accept that one of them is going to fail.
+More investigation would be needed to make the prometheus scraper work correctly on various platforms using only one
+target. For now, I have added both URLs to be discarded and accept that one of them will fail.
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
