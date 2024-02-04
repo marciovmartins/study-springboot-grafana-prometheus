@@ -14,3 +14,7 @@ scrape_configs:
       - targets:
           - study-springboot-grafana-prometheus-app-1:8080
           - host.docker.internal:8080
+    relabel_configs:
+      - action: replace
+        target_label: application
+        replacement: springboot-grafana-prometheus
