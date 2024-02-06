@@ -59,9 +59,9 @@ graph LR
     end
 
     subgraph docker
-        P[Prometheus] -- study - springboot - grafana - prometheus - app - 1:8080 --> A
-        P[Prometheus] -- host . docker . internal:8080 --> B
-        G[Grafana] -- prometheus:9090 --> P
+        P[Prometheus] -- " study-springboot-grafana-prometheus-app-1:8080 " --> A
+        P[Prometheus] -- " host.docker.internal:8080 " --> B
+        G[Grafana] -- " prometheus:9090 " --> P
     end
 ```
 
