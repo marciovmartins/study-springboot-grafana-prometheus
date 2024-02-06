@@ -10,7 +10,12 @@
 <h2 id="table-of-contents">⤴️ Table of Contents</h2>
 
 <ul>
-  <li>❓ <a href="#about" title="Go to about bookmark">About</a></li>
+  <li>
+    ❓ <a href="#about" title="Go to about bookmark">About</a>
+    <ul>
+      <li>📊 <a href="#about-diagrams" title="Go to Systems Diagrams bookmark">System Diagrams</a></li>
+    </ul>
+  </li>
   <li>👩‍🏫 <a href="#learnings" title="Go to learnings bookmark">Learnings</a></li>
   <li>
     🏃 <a href="#how-to-run" title="Go to how to run bookmark">How to Run</a>
@@ -38,6 +43,25 @@ article <a href="https://medium.com/javarevisited/springboot-app-monitoring-with
 Springboot App monitoring with Grafana & Prometheus by Vishnu M V<a/>.
 
 Added some business metrics to Grafana and learned how to provision dashboards and datasources.
+
+<a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
+
+<h2 id="about-diagrams"> 📊 System Diagrams</h2>
+
+```mermaid
+graph LR
+    subgraph host-machine
+        A[mvn spring-boot:run]
+        B[docker run spring-boot:run]
+    end
+    
+    subgraph docker
+        A -- study-springboot-grafana-prometheus-app-1:8080 --> P[Prometheus]
+        B -- host.docker.internal:8080 --> P[Prometheus]
+        P --> G[Grafana]
+    end
+```
+
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
