@@ -50,18 +50,20 @@ Added some business metrics to Grafana and learned how to provision dashboards a
 
 ```mermaid
 graph LR
-    subgraph host-machine
-        A[mvn spring-boot:run]
-        B[docker run spring-boot:run]
+    subgraph Linux
+        A[Application]
     end
-    
+
+    subgraph Windows/MacOSX
+        B[Application]
+    end
+
     subgraph docker
-        A -- study-springboot-grafana-prometheus-app-1:8080 --> P[Prometheus]
-        B -- host.docker.internal:8080 --> P[Prometheus]
-        P --> G[Grafana]
+        P[Prometheus] -- study - springboot - grafana - prometheus - app - 1:8080 --> A
+        P[Prometheus] -- host . docker . internal:8080 --> B
+        G[Grafana] -- prometheus:9090 --> P
     end
 ```
-
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
@@ -73,8 +75,9 @@ Some difficulties getting it to work cross-platform. How docker networking works
 There is no direct way to access the host IP address from within the container, making prometheus difficult to extract
 information from the application by Prometheus scraper.
 
-More investigation would be needed to make the prometheus scraper work correctly on various platforms using only one
-target. For now, I have added both URLs to be discarded and accept that one of them will fail.
+More investigation would be needed to make the prometheus scraper work correctly on various OS platforms using only one
+[target](http://localhost:9090/targets). For now, I have added both URLs to be discarded and accept that one of them
+will fail.
 
 <a href="#table-of-contents" title="Go to table of contents">Back to Top</a>
 
