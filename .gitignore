@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/config/
+/src/test/intellij/scripts/**/http-client.private.env.json
 
 ### STS ###
 .apt_generated
